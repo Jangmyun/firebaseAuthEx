@@ -1,3 +1,4 @@
+const MySQLStore = require("express-mysql-session");
 const mysql = require("mysql2");
 
 const pool = mysql.createPool({
@@ -6,6 +7,9 @@ const pool = mysql.createPool({
   password: "4784",
   database: "test",
 });
+
+const promisePool = pool.promise();
+module.exports = promisePool;
 
 // 아래와 같은 방식을 취하지 않는 이유:
 // pool 연결은 여러개의 DB 연결을 생성해두고 요청 들어올때마다 재사용하는데,
@@ -21,6 +25,12 @@ const pool = mysql.createPool({
 // db.connect();
 // module.exports = db;
 
-const promisePool = pool.promise();
-
-module.exports = promisePool;
+// 다음과 같이 선언 가능
+// const options = {
+//   host: 'localhost',
+//   port: 3306,
+//   user: 'db_user',
+//   password: 'password',
+//   database: 'db_name'
+// };
+// const connection = mysql.createPool(options);
