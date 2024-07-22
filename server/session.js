@@ -1,0 +1,29 @@
+var express = require("express");
+var parseurl = require("parseurl");
+var session = require("express-session");
+// express-session 미들웨어를 module로 설치
+
+var app = express();
+
+// session의 동작 옵션 설정
+app.use(
+  session({
+    secret: "keyboard cat",
+    resave: false,
+    saveUninitialized: true,
+  })
+);
+
+app.get("/", function (req, res, next) {
+  console.log(req.session);
+  if (req.session.num === undefined) {
+    req.session.num = 1;
+  } else {
+    req.session.num = req.session.num + 1;
+  }
+  res.send(`Views : ${req.session.num}`);
+});
+
+app.listen(3001, function () {
+  console.log("Example code running on port 3001");
+});
