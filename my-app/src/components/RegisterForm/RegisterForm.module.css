@@ -1,0 +1,8 @@
+.formBox {
+  display: flex;
+  flex-direction: column;
+}
+.formBox input {
+  width: 30%;
+  margin-top: 10px;
+}
