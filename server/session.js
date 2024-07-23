@@ -1,18 +1,34 @@
-var express = require("express");
-var parseurl = require("parseurl");
-var session = require("express-session");
-// express-session 미들웨어를 module로 설치
+const express = require("express");
+const parseurl = require("parseurl");
+const session = require("express-session");
+// MySQL Session Store
+const MySQLStore = require("express-mysql-session")(session);
+//
+const db = require("./src/config/dbConfig");
+
+const sessionStore = new MySQLStore({} /* session store options */, db);
 
 var app = express();
 
-// session의 동작 옵션 설정
+// session의 미들웨어 세팅
 app.use(
   session({
     secret: "keyboard cat",
     resave: false,
     saveUninitialized: true,
+    store: sessionStore, // 얘 필수
   })
 );
+
+sessionStore
+  .onReady()
+  .then(() => {
+    // MySQL session store 사용 준비 완료됨
+    console.log("MySQLStore ready");
+  })
+  .catch((error) => {
+    console.log(error);
+  });
 
 app.get("/", function (req, res, next) {
   console.log(req.session);
