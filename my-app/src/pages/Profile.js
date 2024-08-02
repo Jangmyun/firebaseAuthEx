@@ -28,7 +28,7 @@ function Profile() {
   const handleLogout = async () => {
     try {
       const response = await axios.post(
-        "localhost:3001/auth/logout",
+        "http://localhost:3001/auth/logout",
         {},
         { withCredentials: true }
       );
