@@ -1,0 +1,45 @@
+const express = require("express");
+const multer = require("multer");
+const path = require("path");
+const { v4: uuidv4 } = require("uuid");
+const fs = require("fs");
+
+const app = express();
+const port = 3000;
+
+// 이미지 저장 디렉토리 설정
+const uploadDir = path.join(__dirname, "uploads");
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir);
+}
+
+// Multer 설정
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, uploadDir);
+  },
+  filename: (req, file, cb) => {
+    const uniqueName = `${uuidv4()}${path.extname(file.originalname)}`;
+    cb(null, uniqueName);
+  },
+});
+
+const upload = multer({ storage: storage });
+
+// 이미지 업로드 라우트
+app.post("/upload", upload.single("image"), (req, res) => {
+  if (!req.file) {
+    return res.status(400).send("No file uploaded.");
+  }
+  const imageUrl = `${req.protocol}://${req.get("host")}/images/${
+    req.file.filename
+  }`;
+  res.json({ imageUrl: imageUrl });
+});
+
+// 이미지 접근 라우트
+app.use("/images", express.static(uploadDir));
+
+app.listen(port, () => {
+  console.log(`Server running at http://localhost:${port}`);
+});
