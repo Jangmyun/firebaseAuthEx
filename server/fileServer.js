@@ -3,9 +3,10 @@ const multer = require("multer");
 const path = require("path");
 const { v4: uuidv4 } = require("uuid");
 const fs = require("fs");
+const cors = require("cors");
 
 const app = express();
-const port = 3000;
+const port = 3001;
 
 // 이미지 저장 디렉토리 설정
 const uploadDir = path.join(__dirname, "uploads");
@@ -35,6 +36,24 @@ app.post("/upload", upload.single("image"), (req, res) => {
     req.file.filename
   }`;
   res.json({ imageUrl: imageUrl });
+});
+
+app.delete("/images/:filename", async (req, res) => {
+  const filename = req.params.filename;
+  const filepath = path.join(uploadDir, filename);
+
+  try {
+    await fs.access(filepath); // 파일 존재 여부 확인
+    await fs.unlink(filepath); // 파일 삭제
+    res.status(200).send("Image deleted successfully");
+  } catch (error) {
+    if (error.code === "ENOENT") {
+      res.status(404).send("Image not found");
+    } else {
+      console.error("Error deleting image:", error);
+      res.status(500).send("Error deleting image");
+    }
+  }
 });
 
 // 이미지 접근 라우트

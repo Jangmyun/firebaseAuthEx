@@ -6,6 +6,8 @@ function Home(props) {
   return (
     <div id="homeContainer">
       <Link to="/login">로그인 페이지 이동</Link>
+      <br></br>
+      <Link to="/img">Img 업로드</Link>
       <Container>
         <Row xs={1} fluid="sm">
           <Col md={5}>
