@@ -14,7 +14,6 @@ router.post("/login", async (req, res) => {
       // username과 일치하는 row 찾으면
       const user = rows[0];
       const isPwMatch = await bcrypt.compare(password, user.password);
-
       if (isPwMatch) {
         req.session.userId = user.id;
         return res.json({ success: true });
