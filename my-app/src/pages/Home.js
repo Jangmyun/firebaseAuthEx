@@ -1,8 +1,16 @@
 import { Col, Container, Form, FormGroup, Input, Label, Row } from "reactstrap";
+import Modal from "../components/Modal/Modal";
+import { useState } from "react";
 
 const { Link } = require("react-router-dom");
 
 function Home(props) {
+  const [isOpened, setIsOpened] = useState(true);
+
+  function closeThisModal() {
+    setIsOpened(false);
+  }
+
   return (
     <div id="homeContainer">
       <Link to="/login">로그인 페이지 이동</Link>
@@ -35,6 +43,12 @@ function Home(props) {
           </Col>
         </Row>
       </Container>
+      <div>
+        <button>Modal 열기</button>
+        <Modal title={"Modal"} onClose={closeThisModal} isOpened={isOpened}>
+          <h1>hi</h1>
+        </Modal>
+      </div>
     </div>
   );
 }
