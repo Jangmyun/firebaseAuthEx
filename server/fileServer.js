@@ -8,6 +8,8 @@ const cors = require("cors");
 const app = express();
 const port = 3001;
 
+app.use(cors({ origin: "http://localhost:3000", optionsSuccessStatus: 200 }));
+
 // 이미지 저장 디렉토리 설정
 const uploadDir = path.join(__dirname, "uploads");
 if (!fs.existsSync(uploadDir)) {
@@ -35,7 +37,7 @@ app.post("/upload", upload.single("image"), (req, res) => {
   const imageUrl = `${req.protocol}://${req.get("host")}/images/${
     req.file.filename
   }`;
-  res.json({ imageUrl: imageUrl });
+  return res.json({ imageUrl: imageUrl });
 });
 
 app.delete("/images/:filename", async (req, res) => {
