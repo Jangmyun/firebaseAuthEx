@@ -36,7 +36,8 @@ app.post("/upload", upload.single("image"), (req, res) => {
   if (!req.file) {
     return res.status(400).send("No file uploaded.");
   }
-  const imageUrl = `${req.protocol}://${req.get("host")}/images/${
+  // req.get("host") => ip.address()
+  const imageUrl = `${req.protocol}://${ip.address() + ":3001"}/images/${
     req.file.filename
   }`;
   return res.json({ imageUrl: imageUrl });
