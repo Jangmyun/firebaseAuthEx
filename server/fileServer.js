@@ -3,6 +3,7 @@ const multer = require("multer");
 const path = require("path");
 const { v4: uuidv4 } = require("uuid");
 const fs = require("fs");
+const ip = require("ip");
 const cors = require("cors");
 
 const app = express();
@@ -31,6 +32,7 @@ const upload = multer({ storage: storage });
 
 // 이미지 업로드 라우트
 app.post("/upload", upload.single("image"), (req, res) => {
+  console.log(ip.address());
   if (!req.file) {
     return res.status(400).send("No file uploaded.");
   }
